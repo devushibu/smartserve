@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --text-main: #000000;
+        --text-muted: #111827;
+        --bg-card: #ffffff;
+        --border: #e2e8f0;
+        --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    }
+    body {
+        background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+        font-family: 'Outfit', sans-serif;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 50px 20px;
+        box-sizing: border-box;
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+    
+    .booking-container {
+        width: 100%;
+        max-width: 550px;
+        background: var(--bg-card);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        color: var(--text-main);
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+    
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 25px;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        transition: all 0.2s;
+    }
+    .back-link:hover {
+        color: var(--primary);
+        transform: translateX(-3px);
+    }
+    
+    h2 {
+        margin-top: 0;
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text-main);
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+        letter-spacing: -0.02em;
+    }
+    
+    .service-desc {
+        color: var(--text-main);
+        background: #f8fafc;
+        padding: 16px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        font-size: 15px;
+        line-height: 1.6;
+        border: 1px solid var(--border);
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: var(--text-main);
+        font-size: 14px;
+    }
+    
+    input[type="text"], input[type="password"], input[type="date"], select, textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 15px;
+        color: var(--text-main);
+        background-color: #fff;
+        box-sizing: border-box;
+        transition: all 0.2s;
+        font-family: inherit;
+    }
+    
+    input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+    
+    select:disabled {
+        background-color: #f1f5f9;
+        cursor: not-allowed;
+        color: #94a3b8;
+    }
+    
+    .amount-display {
+        background-color: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #065f46;
+        padding: 16px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+        margin: 25px 0;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 14px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-family: inherit;
+    }
+    
+    .btn:hover:not(:disabled) {
+        background: var(--primary-hover);
+    }
+    
+    .btn:disabled {
+        background: #cbd5e1;
+        cursor: not-allowed;
+    }
+
+    .btn-secondary {
+        background: var(--gray);
+    }
+    .btn-secondary:hover {
+        background: #475569;
+    }
+
+    /* Additional dynamic blocks */
+    .fade-in {
+        animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .payment-method-box {
+        background: #f8fafc;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        margin-bottom: 15px;
+    }
+
+    .radio-group {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+    .radio-group label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        font-weight: normal;
+        margin: 0;
+    }
+
+    .step-indicator {
+        font-size: 13px;
+        color: var(--gray);
+        float: right;
+        margin-top: 6px;
+    }
+</style>
+<script>
+    async function fetchSlots() {
+        const dateStr = document.getElementById('datePicker').value;
+        const providerEmail = document.getElementById('providerEmail').value;
+        const slotSelect = document.getElementById('slotSelect');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        slotSelect.innerHTML = '<option value="">Loading slots...</option>';
+        nextBtn.disabled = true;
+
+        if (!dateStr) return;
+
+        try {
+            const response = await fetch(`/api/slots/${providerEmail}?date=${dateStr}`);
+            const availableSlots = await response.json();
+
+            if (availableSlots.length > 0) {
+                slotSelect.innerHTML = '<option value="">-- Select a Time Slot --</option>';
+                availableSlots.forEach(slot => {
+                    const option = document.createElement('option');
+                    option.value = slot;
+                    option.textContent = slot;
+                    slotSelect.appendChild(option);
+                });
+                slotSelect.disabled = false;
+            } else {
+                slotSelect.innerHTML = '<option value="">No slots available for this date</option>';
+                slotSelect.disabled = true;
+            }
+        } catch (e) {
+            slotSelect.innerHTML = '<option value="">Error loading slots</option>';
+        }
+    }
+
+    function checkForm() {
+        const slotSelect = document.getElementById('slotSelect');
+        const nextBtn = document.getElementById('nextBtn');
+        if (slotSelect.value) {
+            nextBtn.disabled = false;
+        } else {
+            nextBtn.disabled = true;
+        }
+    }
+
+    function goToPayment() {
+        const address = document.getElementById('addressInput').value;
+        const slot = document.getElementById('slotSelect').value;
+        
+        if (!address.trim()) {
+            alert("Please provide the service address.");
+            return;
+        }
+        if (!slot) {
+            alert("Please select a time slot.");
+            return;
+        }
+
+        // Hide booking, show payment
+        document.getElementById('step-1-booking').style.display = 'none';
+        document.getElementById('step-2-payment').style.display = 'block';
+        togglePaymentDetails(); // Initialize UI based on default selection
+    }
+
+    function goToBooking() {
+        // Hide payment, show booking
+        document.getElementById('step-2-payment').style.display = 'none';
+        document.getElementById('step-1-booking').style.display = 'block';
+    }
+
+    function togglePaymentDetails() {
+        const mode = document.getElementById('paymentMode').value;
+        const upiDetails = document.getElementById('upi-details');
+        const cardDetails = document.getElementById('card-details');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        upiDetails.style.display = 'none';
+        cardDetails.style.display = 'none';
+        
+        // Remove 'required' from hidden fields to allow form submission
+        document.getElementById('upiId').removeAttribute('required');
+        document.getElementById('cardNumber').removeAttribute('required');
+        document.getElementById('cardExpiry').removeAttribute('required');
+        document.getElementById('cardCvv').removeAttribute('required');
+
+        if (mode === 'UPI') {
+            upiDetails.style.display = 'block';
+            submitBtn.textContent = 'Pay securely with UPI';
+            document.getElementById('upiId').setAttribute('required', 'true');
+        } else if (mode === 'Card') {
+            cardDetails.style.display = 'block';
+            submitBtn.textContent = 'Pay securely with Card';
+            document.getElementById('cardNumber').setAttribute('required', 'true');
+            document.getElementById('cardExpiry').setAttribute('required', 'true');
+            document.getElementById('cardCvv').setAttribute('required', 'true');
+        } else {
+            submitBtn.textContent = 'Confirm Booking (Pay at Service)';
+        }
+    }
+</script>
+</head>
+<body>
+
+<div class="booking-container fade-in">
+    <a href="/provider_profile/{{ provider.email }}" class="back-link">&larr; Back to Profile</a>
+
+    <form action="/payment" method="POST">
+        <input type="hidden" name="provider" id="providerEmail" value="{{provider.email}}">
+        <input type="hidden" name="amount" value="500">
+
+        <!-- STEP 1: BOOKING DETAILS -->
+        <div id="step-1-booking">
+            <h2>
+                Book Appointment
+            </h2>
+            <div class="service-desc">
+                <strong>Provider:</strong> {{ provider.name }}<br>
+                <strong>Service:</strong> {{ provider.service }}
+            </div>
+
+            <div class="form-group">
+                <label for="addressInput">Service Address</label>
+                <textarea name="address" id="addressInput" required rows="3" style="width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; font-family: inherit; color: var(--dark); box-sizing: border-box; resize: vertical;" placeholder="Enter full address for the service..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="datePicker">Select Date</label>
+                <input type="date" name="date" id="datePicker" required onchange="fetchSlots()" min="">
+            </div>
+
+            <div class="form-group">
+                <label for="slotSelect">Select Time Slot</label>
+                <select name="slot" id="slotSelect" required disabled onchange="checkForm()">
+                    <option value="">-- Select Date First --</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn" id="nextBtn" disabled onclick="goToPayment()">Continue to Payment</button>
+        </div>
+
+        <!-- STEP 2: PAYMENT DETAILS -->
+        <div id="step-2-payment" style="display: none;" class="fade-in">
+            <h2>
+                Payment Details
+            </h2>
+
+            <div class="form-group">
+                <label for="paymentMode">Choose Payment Method</label>
+                <select name="payment_mode" id="paymentMode" required onchange="togglePaymentDetails()">
+                    <option value="Cash">Cash (Pay at Service)</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Card">Credit / Debit Card</option>
+                </select>
+            </div>
+
+            <!-- UPI Specific Fields -->
+            <div id="upi-details" class="payment-method-box">
+                <label>Select UPI App</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="upi_app" value="GPay" checked> <img src="https://img.icons8.com/color/24/null/google-logo.png" style="height:16px;"> GPay</label>
+                    <label><input type="radio" name="upi_app" value="Paytm"> Paytm</label>
+                    <label><input type="radio" name="upi_app" value="PhonePe"> PhonePe</label>
+                    <label><input type="radio" name="upi_app" value="Other"> Other</label>
+                </div>
+                
+                <label>UPI ID</label>
+                <input type="text" name="upi_id" id="upiId" placeholder="example@upi">
+            </div>
+
+            <!-- Card Specific Fields -->
+            <div id="card-details" class="payment-method-box">
+                <label>Card Number</label>
+                <input type="text" name="card_number" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" style="margin-bottom: 15px;">
+                
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label>Expiry Date</label>
+                        <input type="text" name="card_expiry" id="cardExpiry" placeholder="MM/YY">
+                    </div>
+                    <div style="flex: 1;">
+                        <label>CVV</label>
+                        <input type="password" name="card_cvv" id="cardCvv" placeholder="123" maxlength="4">
+                    </div>
+                </div>
+                <div style="margin-top: 15px;">
+                    <label>Cardholder Name</label>
+                    <input type="text" name="card_name" placeholder="Name on card">
+                </div>
+            </div>
+
+            <div class="amount-display">
+                Total Amount to Pay: ₹500
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="goToBooking()">Back</button>
+                <button type="submit" class="btn" id="submitBtn" style="flex: 2;">Confirm Booking</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    // Prevent selecting past dates
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('datePicker').setAttribute('min', today);
+</script>
+
+</body>
+</html>

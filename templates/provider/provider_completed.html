@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Completed Works</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary: #8b5cf6;
+        --secondary: #6366f1;
+        --dark: #1e293b;
+        --light: #f8fafc;
+        --gray: #64748b;
+        --success: #10b981;
+    }
+    body { 
+        font-family: 'Outfit', sans-serif;
+        margin: 0;
+        background: radial-gradient(circle at top left, #e0c3fc 0%, #8ec5fc 100%);
+        color: var(--dark);
+        min-height: 100vh;
+        padding: 40px 20px;
+    }
+    
+    .overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.1);
+        z-index: -1;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    h2 { 
+        border-bottom: 2px solid rgba(255, 255, 255, 0.5); 
+        padding-bottom: 15px; 
+        color: var(--dark);
+        font-weight: 700;
+        font-size: 28px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .card { 
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-left: 5px solid var(--success);
+        padding: 25px; 
+        margin-bottom: 20px; 
+        border-radius: 16px; 
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        color: var(--dark);
+    }
+    
+    .card p {
+        margin: 10px 0;
+        font-size: 15px;
+    }
+    
+    .card strong {
+        color: var(--primary);
+        font-weight: 600;
+    }
+    
+    .btn-back { 
+        display: inline-flex; 
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px; 
+        background: rgba(255, 255, 255, 0.8); 
+        color: var(--dark); 
+        text-decoration: none; 
+        border-radius: 8px; 
+        margin-bottom: 10px;
+        font-weight: 600;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: all 0.3s;
+    }
+    .btn-back:hover {
+        background: white;
+        transform: translateX(-3px);
+    }
+    
+    .empty-msg {
+        background: rgba(255, 255, 255, 0.7);
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        color: var(--gray);
+        font-weight: 500;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        background: rgba(16, 185, 129, 0.15);
+        color: var(--success);
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    /* Payment Classes */
+    .payment-paid { color: #10b981; font-weight: 700; }
+    .payment-unpaid { color: #ef4444; font-weight: 700; }
+</style>
+</head>
+
+<body>
+<div class="overlay"></div>
+<div class="container">
+
+<a href="/provider_home" class="btn-back">&larr; Back to Dashboard</a>
+
+<h2>Completed Works</h2>
+
+{% if bookings %}
+    <div style="max-width: 600px;">
+    {% for b in bookings %}
+        <div class="card">
+            <p><strong>Customer Name:</strong> {{ b.user_name }}</p>
+            <p><strong>Customer Phone:</strong> {{ b.user_phone }}</p>
+            <p><strong>Customer Email:</strong> {{ b.user }}</p>
+            <p><strong>Service Address:</strong> {{ b.address|default('Not Provided', true) }}</p>
+            <p><strong>Scheduled Date:</strong> {{ b.date }}</p>
+            <p><strong>Time Slot:</strong> {{ b.slot }}</p>
+            <p><strong>Amount:</strong> ₹{{ b.amount|default('500', true) }}</p>
+            <p><strong>Payment Mode:</strong> {{ b.payment_mode|default('Cash', true) }}</p>
+            <p><strong>Status:</strong> <span class="status-badge">Completed</span></p>
+            <p><strong>Payment Status:</strong> 
+                {% if b.payment == 'Paid' %}
+                    <span class="payment-paid">Paid</span>
+                {% else %}
+                    <span class="payment-unpaid">Unpaid</span>
+                    <form method="POST" action="/update_payment/{{ b._id }}?redirect=completed" style="display: inline; margin-left: 10px;">
+                        <button type="submit" class="btn" style="padding: 5px 12px; font-size: 12px; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer; font-family: 'Outfit', sans-serif;">Mark as Paid</button>
+                    </form>
+                {% endif %}
+            </p>
+        </div>
+    {% endfor %}
+    </div>
+{% else %}
+    <p class="empty-msg">No completed works yet.</p>
+{% endif %}
+
+</div>
+</body>
+</html>

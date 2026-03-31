@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - All Payments</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #059669;
+            --success-bg: #ecfdf5;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #000000;
+            --text-muted: #111827;
+            --border: #e2e8f0;
+            --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            color: var(--text-main);
+            padding: 40px;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .header-content h2 {
+            font-size: 30px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            letter-spacing: -0.02em;
+        }
+
+        .header-content p {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-back:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .table-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background-color: #f8fafc; }
+
+        .cell-id { font-family: monospace; color: var(--text-muted); font-weight: 400; }
+        .cell-primary, .cell-subtext { font-weight: 400; color: var(--text-main); }
+        .cell-subtext { font-weight: 400; color: var(--text-main); }
+
+        .payment-ref {
+            font-family: monospace;
+            font-weight: 400;
+            color: var(--primary);
+        }
+
+        .amount { font-weight: 500; color: var(--text-main); } /* Updated from 700 to 600 */
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+        .badge-paid {
+            background-color: var(--success-bg);
+            color: var(--success);
+        }
+        .badge-unpaid {
+            background-color: #fee2e2;
+            color: #ef4444;
+        }
+
+        .empty-state { padding: 64px 24px; text-align: center; color: var(--text-muted); }
+        .empty-state svg { margin-bottom: 16px; opacity: 0.4; color: var(--text-muted); }
+        .empty-state h3 { color: var(--text-main); margin-bottom: 8px; font-size: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="page-header">
+        <div class="header-content">
+            <h2>Customer Payments</h2>
+            <p>Track all completed transaction references and amounts</p>
+        </div>
+        <a href="/admin" class="btn-back">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Dashboard
+        </a>
+    </div>
+
+    <div class="table-card">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Customer Email</th>
+                        <th>Service Provider</th>
+                        <th>Service Type</th>
+                        <th>Amount</th>
+                        <th>Payment Mode</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in payments %}
+                    <tr>
+                        <td class="cell-id">#{{ p._id | string | truncate(8, True, '') }}</td>
+                        <td class="cell-primary">{{ p.user }}</td>
+                        <td>{{ p.provider }}</td>
+                        <td class="cell-primary">{{ p.service }}</td>
+                        <td class="amount">₹{{ p.amount }}</td>
+                        <td class="cell-subtext">{{ p.payment_mode }}</td>
+                        <td>
+                            <span class="badge {% if p.status == 'Paid' %}badge-paid{% else %}badge-unpaid{% endif %}">{{ p.status }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    
+                    {% if not payments %}
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                                <h3>No Payments Found</h3>
+                                <p>There are currently no processed payments in the system.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

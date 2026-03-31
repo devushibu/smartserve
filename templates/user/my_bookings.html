@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Bookings</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --success: #10b981;
+        --danger: #dc2626;
+        --text-main: #000000;
+        --text-muted: #111827;
+        --bg-card: #ffffff;
+        --border: #e2e8f0;
+        --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    }
+
+    body { 
+        font-family: 'Outfit', sans-serif; 
+        margin: 0; 
+        background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+        color: var(--text-main);
+        min-height: 100vh;
+        padding: 40px;
+        line-height: 1.5;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    h2 { font-weight: 600; color: var(--text-main); margin-bottom: 24px; letter-spacing: -0.01em; }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        margin-bottom: 24px;
+        transition: all 0.2s;
+    }
+    .btn-back:hover { transform: translateX(-4px); }
+
+    .card { 
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        padding: 24px; 
+        margin-bottom: 16px; 
+        border-radius: 12px; 
+        box-shadow: var(--shadow);
+    }
+
+    .card p {
+        margin: 8px 0;
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--text-main);
+    }
+
+    .btn-cancel { 
+        padding: 8px 20px; 
+        background: #fee2e2; 
+        color: #dc2626; 
+        text-decoration: none; 
+        border: none; 
+        border-radius: 8px; 
+        cursor: pointer; 
+        font-weight: 500;
+        font-size: 13px;
+        transition: all 0.2s;
+    }
+    .btn-cancel:hover { background: #fecaca; }
+
+    .status { font-weight: 500; padding: 2px 10px; border-radius: 9999px; font-size: 12px; }
+    .status.confirmed, .status.Scheduled { background: #fffbeb; color: #b45309; }
+    .status.Working { background: #eff6ff; color: #1d4ed8; }
+    .status.Completed { background: #ecfdf5; color: #059669; }
+    .status.cancelled, .status.Cancelled { background: #fef2f2; color: #dc2626; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <a href="/user_home" class="btn-back">&larr; Back to Dashboard</a>
+
+    <h2>My Bookings</h2>
+
+    {% if bookings %}
+        {% for b in bookings %}
+        <div class="card">
+            <p><strong>Provider Email:</strong> {{ b.provider }}</p>
+            <p><strong>Service:</strong> {{ b.service }}</p>
+            <p><strong>Date:</strong> {{ b.date }}</p>
+            <p><strong>Time Slot:</strong> {{ b.slot }}</p>
+            <p><strong>Status:</strong> 
+                <span class="status {% if 'Cancelled' in b.status %}cancelled{% else %}{{ b.status }}{% endif %}">
+                    {{ b.status }}
+                </span>
+            </p>
+            
+            {% if 'Cancelled' not in b.status and b.status != 'Completed' %}
+                <form action="/cancel/{{b._id}}" method="POST" style="display:inline; margin-top: 12px;">
+                    <button type="submit" class="btn-cancel">Cancel Booking</button>
+                </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align: center; color: var(--text-muted); padding: 40px;">You have no bookings yet.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

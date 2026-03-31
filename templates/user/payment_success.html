@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Success - SmartServe</title>
+<style>
+    :root {
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --text-main: #000000;
+        --text-muted: #111827;
+        --success: #10b981;
+        --bg-card: #ffffff;
+        --border: #e2e8f0;
+        --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    }
+    body {
+        font-family: 'Outfit', sans-serif;
+        background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: var(--text-main);
+    }
+    .success-container {
+        background: var(--bg-card);
+        border-radius: 24px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        padding: 60px 40px;
+        max-width: 450px;
+        width: 90%;
+        text-align: center;
+        animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes scaleIn {
+        from { transform: scale(0.9); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+    .success-icon {
+        width: 80px;
+        height: 80px;
+        background-color: #f0fdf4;
+        color: var(--success);
+        border: 1px solid #dcfce7;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        font-size: 32px;
+        font-weight: 700;
+    }
+    h2 {
+        color: var(--text-main);
+        margin: 0 0 15px 0;
+        font-size: 1.8rem;
+    }
+    p {
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 35px;
+    }
+    .btn {
+        display: inline-block;
+        width: 100%;
+        padding: 14px 20px;
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.2s;
+        box-sizing: border-box;
+    }
+    .btn:hover {
+        background: var(--primary-hover);
+    }
+    .btn:active {
+        transform: translateY(1px);
+    }
+</style>
+</head>
+<body>
+
+<div class="success-container">
+    <div class="success-icon">✓</div>
+    <h2>Booking Successful!</h2>
+    <p>Your booking has been confirmed. The provider details and time slot have been saved to your dashboard.</p>
+    
+    <a href="/my_bookings" class="btn">View My Bookings</a>
+</div>
+
+</body>
+</html>

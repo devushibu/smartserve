@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Provider Registration - Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --secondary: #10b981;
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+        --input-bg: #f1f5f9;
+        --error: #ef4444;
+        --glow: rgba(79, 70, 229, 0.3);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: 'Outfit', sans-serif;
+        background-color: var(--bg);
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        background-image: 
+            radial-gradient(circle at top left, #e0c3fc 0%, #8ec5fc 100%);
+    }
+
+    .wrapper {
+        display: flex;
+        width: 100%;
+        max-width: 1000px;
+        background: var(--surface);
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        animation: fadeScale 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeScale {
+        from { opacity: 0; transform: scale(0.95) translateY(20px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .left-panel {
+        flex: 1;
+        background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .left-panel::before {
+        content: '';
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 40%);
+        top: -50%;
+        left: -50%;
+        animation: rotateBg 20s linear infinite;
+    }
+    
+    @keyframes rotateBg {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .left-panel h1 {
+        font-size: 38px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        line-height: 1.2;
+        position: relative;
+        z-index: 1;
+    }
+
+    .left-panel p {
+        font-size: 16px;
+        line-height: 1.6;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+        max-width: 400px;
+    }
+
+    .right-panel {
+        flex: 1.2;
+        padding: 50px;
+        background: var(--surface);
+    }
+
+    .form-header {
+        margin-bottom: 30px;
+    }
+
+    .form-header h2 {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 8px;
+    }
+
+    .form-header p {
+        color: var(--text-muted);
+        font-size: 15px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    @media (max-width: 850px) {
+        .wrapper { flex-direction: column; }
+        .left-panel { padding: 40px 30px; text-align: center; }
+        .left-panel p { margin: 0 auto; }
+        .right-panel { padding: 40px 25px; }
+        .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .input-group {
+        position: relative;
+    }
+
+    .input-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .input-group input, .input-group select {
+        width: 100%;
+        background: var(--input-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 14px 14px 44px;
+        font-size: 15px;
+        color: var(--text-main);
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    .input-group select {
+        appearance: none;
+        cursor: pointer;
+    }
+
+    .input-group .icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        transition: color 0.3s ease;
+        pointer-events: none;
+    }
+
+    .input-group input:focus, .input-group select:focus {
+        outline: none;
+        background: var(--surface);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--glow);
+    }
+
+    .input-group input:focus + .icon, .input-group select:focus + .icon {
+        color: var(--primary);
+    }
+
+    .input-group input::placeholder {
+        color: #94a3b8;
+    }
+
+    .file-upload-wrapper {
+        border: 2px dashed #cbd5e1;
+        border-radius: 16px;
+        padding: 24px 20px;
+        text-align: center;
+        background: #f8fafc;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .file-upload-wrapper:hover {
+        border-color: var(--primary);
+        background: #f1f5f9;
+        transform: scale(1.01);
+    }
+
+    .file-upload-wrapper input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+    }
+
+    .file-upload-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .file-upload-icon {
+        width: 44px;
+        height: 44px;
+        background: #e0e7ff;
+        color: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        transition: all 0.3s;
+    }
+
+    .file-text {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-main);
+    }
+
+    .file-subtext {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    .submit-btn {
+        grid-column: 1 / -1;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 16px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    .submit-btn:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
+    }
+
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+
+    .auth-links {
+        grid-column: 1 / -1;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: var(--text-muted);
+    }
+
+    .auth-links a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+    }
+
+    .auth-links a:hover {
+        color: var(--primary-hover);
+        text-decoration: underline;
+    }
+    
+    .home-link {
+        display: inline-block;
+        margin-top: 15px;
+        color: var(--text-muted) !important;
+        font-weight: 500 !important;
+    }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="left-panel">
+        <h1>Empower Your Service Career</h1>
+        <p>Join our premium network of professionals. Connect with customers effortlessly and grow your business on your own terms.</p>
+    </div>
+
+    <div class="right-panel">
+        <div class="form-header">
+            <h2>Create Provider Account</h2>
+            <p>Fill in your details to get started on your journey.</p>
+        </div>
+
+        <form action="/register_provider" method="POST" enctype="multipart/form-data" class="form-grid">
+            
+            <div class="input-group">
+                <span class="icon">👤</span>
+                <input type="text" name="name" id="name" placeholder="Full Name" required>
+            </div>
+
+            <div class="input-group">
+                <span class="icon">✉️</span>
+                <input type="email" name="email" id="email" placeholder="Email Address" required>
+            </div>
+
+            <div class="input-group">
+                <span class="icon">🔒</span>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+            </div>
+
+            <div class="input-group">
+                <span class="icon">📱</span>
+                <input type="tel" name="phone" id="phone" placeholder="Phone Number" required>
+            </div>
+
+            <div class="input-group">
+                <span class="icon">🛠️</span>
+                <select name="service" id="service" required>
+                    <option value="" disabled selected hidden>Select Service Type</option>
+                    <option value="Cleaning">Cleaning</option>
+                    <option value="Plumbing">Plumbing</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Gardening">Gardening</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <span class="icon">⭐</span>
+                <input type="number" name="experience" id="experience" placeholder="Experience (Years)" min="0" required>
+            </div>
+
+            <div class="input-group full-width">
+                <span class="icon">📍</span>
+                <input type="text" name="location" id="location" placeholder="Your Full Address/Location" required>
+            </div>
+
+            <div class="input-group full-width">
+                <div class="file-upload-wrapper">
+                    <input type="file" name="certificate" id="certificate" accept=".pdf,.png,.jpg,.jpeg" required onchange="updateFileName(this)">
+                    <div class="file-upload-content">
+                        <div class="file-upload-icon">📄</div>
+                        <div class="file-text" id="file-text">Upload Eligibility Certificate</div>
+                        <div class="file-subtext">Supported formats: PDF, PNG, JPG</div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Register as Provider <span>&rarr;</span>
+            </button>
+            
+            <div class="auth-links">
+                Already have an account? <a href="/login">Sign In</a><br>
+                <a href="/" class="home-link">&larr; Back to Home</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function updateFileName(input) {
+        const textElem = document.getElementById('file-text');
+        const iconElem = document.querySelector('.file-upload-icon');
+        if(input.files && input.files[0]) {
+            textElem.textContent = input.files[0].name;
+            textElem.style.color = 'var(--primary)';
+            iconElem.textContent = '✅';
+            iconElem.style.background = '#dcfce7';
+            iconElem.style.color = '#16a34a';
+        } else {
+            textElem.textContent = 'Upload Eligibility Certificate';
+            textElem.style.color = 'var(--text-main)';
+            iconElem.textContent = '📄';
+            iconElem.style.background = '#e0e7ff';
+            iconElem.style.color = 'var(--primary)';
+        }
+    }
+</script>
+
+</body>
+</html>

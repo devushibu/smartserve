@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Verify Providers</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #059669;
+            --success-bg: #ecfdf5;
+            --warning: #d97706;
+            --warning-bg: #fffbeb;
+            --danger: #dc2626;
+            --danger-bg: #fef2f2;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #000000;
+            --text-muted: #111827;
+            --border: #e2e8f0;
+            --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            color: var(--text-main);
+            padding: 40px;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .header-content h2 {
+            font-size: 30px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            letter-spacing: -0.02em;
+        }
+
+        .header-content p {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-back:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .table-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background-color: #f8fafc; }
+
+        .cell-primary { font-weight: 400; color: var(--text-main); }
+        .cell-subtext { font-weight: 400; color: var(--text-main); }
+
+        .badge-true {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+            background-color: var(--success-bg);
+            color: var(--success);
+        }
+
+        .badge-false {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+            background-color: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .btn-verify {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-verify:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .cert-link {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .cert-link:hover { text-decoration: underline; }
+
+        .empty-state { padding: 64px 24px; text-align: center; color: var(--text-muted); }
+        .empty-state svg { margin-bottom: 16px; opacity: 0.4; color: var(--success); }
+        .empty-state h3 { color: var(--text-main); margin-bottom: 8px; font-size: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="page-header">
+        <div class="header-content">
+            <h2>Verify Providers</h2>
+            <p>Review and verify pending provider applications</p>
+        </div>
+        <a href="/admin" class="btn-back">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Dashboard
+        </a>
+    </div>
+
+    <div class="table-card">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Provider Name</th>
+                        <th>Service Type</th>
+                        <th>Email Address</th>
+                        <th>Phone</th>
+                        <th>Location</th>
+                        <th>Certificate</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set ns = namespace(has_pending=false) %}
+                    {% for p in providers %}
+                        {% if not p.verified %}
+                            {% set ns.has_pending = true %}
+                            <tr>
+                                <td class="cell-primary">{{ p.name }}</td>
+                                <td class="cell-primary">{{ p.service }}</td>
+                                <td class="cell-subtext">{{ p.email }}</td>
+                                <td class="cell-subtext">{{ p.phone }}</td>
+                                <td class="cell-subtext">{{ p.location }}</td>
+                                <td>
+                                    {% if p.certificate %}
+                                        <a href="{{ url_for('static', filename=p.certificate.replace('uploads/', 'uploads/').split('static/')[-1]) if 'static' in p.certificate else url_for('static', filename=p.certificate) }}" target="_blank" class="cert-link">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                <polyline points="14 2 14 8 20 8"></polyline>
+                                            </svg>
+                                            View PDF
+                                        </a>
+                                    {% else %}
+                                        <span style="color: #94a3b8; font-style: italic;">Not Provided</span>
+                                    {% endif %}
+                                </td>
+                                <td><span class="badge-false">Pending</span></td>
+                                <td>
+                                    <a href="/verify/{{p.email}}" class="btn-verify">Approve</a>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if not ns.has_pending %}
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                <h3>All Caught Up!</h3>
+                                <p>There are no pending providers waiting for verification right now.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

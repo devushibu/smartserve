@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>User Home</title>
+<style>
+    :root {
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --success: #10b981;
+        --danger: #dc2626;
+        --text-main: #000000;
+        --text-muted: #111827;
+        --bg-card: #ffffff;
+        --border: #e2e8f0;
+        --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    }
+    body { 
+        font-family: 'Outfit', sans-serif;
+        margin: 0;
+        background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+        color: var(--text-main);
+        min-height: 100vh;
+        line-height: 1.5;
+    }
+    .header-bar {
+        background: white;
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 30px;
+    }
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    h1 { margin: 0; color: var(--text-main); font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+    h2 { padding-bottom: 10px; color: var(--text-main); font-weight: 600; margin-top: 40px; letter-spacing: -0.01em; }
+    
+    .btn { 
+        padding: 8px 16px; 
+        background: var(--primary); 
+        color: white; 
+        text-decoration: none; 
+        border: none; 
+        border-radius: 6px; 
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s;
+        display: inline-block;
+    }
+    .btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+    
+    .btn-outline {
+        padding: 8px 16px; 
+        background: transparent; 
+        color: var(--primary); 
+        text-decoration: none; 
+        border: 1px solid var(--primary); 
+        border-radius: 6px; 
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    .btn-outline:hover { background: rgba(67, 97, 238, 0.1); }
+
+    .btn-logout { 
+        background: var(--danger); 
+        padding: 8px 16px; 
+        color: white; 
+        text-decoration: none; 
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    .btn-logout:hover { background: #c0392b; }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .search-box { 
+        background: white; 
+        padding: 25px; 
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        border-radius: 12px; 
+    }
+    .search-box h3 { margin-top: 0; color: var(--dark); margin-bottom: 20px;}
+    
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    label { font-weight: 500; color: var(--text-main); font-size: 14px;}
+
+    input[type="text"], select { 
+        padding: 10px 15px; 
+        width: 220px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-family: inherit;
+        outline: none;
+        transition: all 0.2s;
+    }
+    input[type="text"]:focus, select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .provider-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+        margin-top: 24px;
+    }
+
+    .card { 
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        padding: 24px; 
+        border-radius: 16px; 
+        box-shadow: var(--shadow);
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
+    }
+    .card h3 {
+        margin-top: 0;
+        color: var(--text-main);
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+    .card p {
+        color: var(--text-main);
+        margin: 8px 0;
+        font-size: 14px;
+        font-weight: 400;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="header-bar">
+    <h1>Welcome User</h1>
+    <div class="header-actions">
+        <a href="/my_bookings" class="btn">View My Booking History</a>
+        <a href="/login" class="btn-logout">Logout</a>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="search-box">
+        <h3>Find Service Providers</h3>
+        <form method="GET" action="/user_home" class="form-row">
+            <div class="form-group">
+                <label>Service Type</label>
+                <select name="service">
+                    <option value="">All Services</option>
+                    <option value="Cleaning" {% if service == 'Cleaning' %}selected{% endif %}>Cleaning</option>
+                    <option value="Plumbing" {% if service == 'Plumbing' %}selected{% endif %}>Plumbing</option>
+                    <option value="Electrical" {% if service == 'Electrical' %}selected{% endif %}>Electrical</option>
+                    <option value="Gardening" {% if service == 'Gardening' %}selected{% endif %}>Gardening</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" name="location" placeholder="e.g. New York, Downtown" value="{{ location }}">
+            </div>
+            
+            <div class="form-group" style="align-self: flex-end;">
+                <button type="submit" class="btn">Search</button>
+            </div>
+            <div class="form-group" style="align-self: flex-end;">
+                <a href="/user_home" class="btn-outline">Clear</a>
+            </div>
+        </form>
+    </div>
+
+    <h2>Available Providers</h2>
+
+    <div class="provider-grid">
+    {% if providers %}
+        {% for p in providers %}
+        <div class="card">
+            <h3>{{ p.name }}</h3>
+            <p><strong>Service:</strong> <span style="color: var(--primary); font-weight: 500;">{{ p.service }}</span></p>
+            <p><strong>Location:</strong> {{ p.location }}</p>
+            <p><strong>Experience:</strong> {{ p.experience|default('N/A', true) }} Years ⭐</p>
+            
+            <div style="margin-top: 20px;">
+                <a href="/provider_profile/{{p.email}}" class="btn" style="width: 100%; box-sizing: border-box; text-align: center;">View Profile & Book</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="grid-column: 1 / -1; text-align: center; color: var(--gray); padding: 40px;">No providers available matching your criteria.</p>
+    {% endif %}
+    </div>
+</div>
+
+
+</body>
+</html>

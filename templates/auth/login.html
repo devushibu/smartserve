@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartServe - Login</title>
+    <!-- Fixed HTML entity encoding for the font URL -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --surface: #ffffff;
+            --text-base: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --ring: rgba(79, 70, 229, 0.25);
+            --error-bg: #fef2f2;
+            --error-text: #b91c1c;
+            --error-border: #f87171;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: #f8fafc;
+            background-image: radial-gradient(circle at top left, #e0c3fc 0%, #8ec5fc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            color: var(--text-base);
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 440px;
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-card {
+            background-color: var(--surface);
+            padding: 40px 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo svg {
+            filter: drop-shadow(0 4px 6px rgba(79, 70, 229, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .logo svg:hover {
+            transform: scale(1.05);
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #1e293b;
+        }
+
+        .brand p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .alert {
+            background-color: var(--error-bg);
+            color: var(--error-text);
+            padding: 12px 16px;
+            border: 1px solid var(--error-border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 15px;
+            color: var(--text-base);
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background-color: var(--surface);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--ring);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-hover);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 30px 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .divider:not(:empty)::before {
+            margin-right: 15px;
+        }
+
+        .divider:not(:empty)::after {
+            margin-left: 15px;
+        }
+
+        .register-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-outline {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #475569;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background-color: transparent;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: #cbd5e1;
+            background-color: #f1f5f9;
+            color: var(--text-base);
+        }
+
+        .home-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: var(--text-muted);
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .home-link:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="logo">
+            <svg width="50" height="50" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="48" height="48" rx="12" fill="#4f46e5"/>
+                <path d="M25 12L15 26H23V36L33 22H25V12Z" fill="white"/>
+            </svg>
+        </div>
+        <div class="brand">
+            <h2>SmartServe</h2>
+            <p>Log in to your account</p>
+        </div>
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" id="email" name="email" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Sign In</button>
+        </form>
+
+        <div class="divider">New to SmartServe?</div>
+
+        <div class="register-links">
+            <a href="/register_user" class="btn-outline">Create a customer account</a>
+            <a href="/register_provider" class="btn-outline">Register as a service provider</a>
+        </div>
+    </div>
+    
+    <a href="/" class="home-link">&larr; Back to the homepage</a>
+</div>
+
+</body>
+</html>
